@@ -1,0 +1,15 @@
+---
+- name: Install Open Media vault
+  ansible.builtin.include_tasks: install_openmediavault.yml
+
+- name: Set up file system mounts and exports
+  ansible.builtin.include_tasks: setup_filesystems.yml
+
+- name: Write any configuration files specified
+  ansible.builtin.include_tasks: write_files.yml
+  loop: "{{ write_files }}"
+  loop_control:
+    loop_var: file
+
+- name: Reboot to take on new configuration
+  ansible.builtin.reboot:

@@ -1,0 +1,22 @@
+---
+- name: Add any specified mounts
+  become: true
+  ansible.posix.mount:
+    path: "{{ mount.mountpoint }}"
+    src: "{{ mount.source }}"
+    fstype: "{{ mount.fstype }}"
+    opts: "{{ mount.opts }}"
+    dump: "{{ mount.dump }}"
+    passno: "{{ mount.passno }}"
+    state: present
+  loop: "{{ mounts }}"
+  loop_control:
+    loop_var: mount
+
+- name: Add any specified exports
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    state: present
+    line: "{{ item }}"
+  loop: "{{ exports }}"

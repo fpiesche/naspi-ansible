@@ -1,0 +1,28 @@
+---
+- name: Gather package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Check if OMV is already installed
+  set_fact:
+    omv_installed: "{{ ansible_facts.packages['openmediavault'] | length }} > 0"
+
+- name: Download OMV installer
+  when: not omv_installed
+  ansible.builtin.uri:
+    url: https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install
+    return_content: yes
+  register: omv_installer
+
+- name: Run OMV installer
+  when: not omv_installed
+  become: true
+  ansible.builtin.shell:
+    cmd: /bin/bash
+    stdin: "{{ omv_installer.content }}"
+
+- name: Install OMV add-on packages
+  when: extra_packages is defined
+  become: true
+  ansible.builtin.apt:
+    name: "{{ extra_packages }}"

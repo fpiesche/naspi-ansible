@@ -1,0 +1,9 @@
+---
+roles:
+- name: fpiesche.raspi_setup
+- name: geerlingguy.swap
+- name: apollo13.borgbackup
+
+collections:
+- name: https://github.com/dev-sec/ansible-collection-hardening
+  type: git

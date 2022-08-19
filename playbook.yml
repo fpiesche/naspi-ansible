@@ -1,0 +1,39 @@
+---
+- hosts: ilpalazzo
+
+  vars_files:
+  - "vault.yml"
+  - "vars.yml"
+
+  roles:
+  - role: fpiesche.raspi_setup
+    vars:
+      authorized_keys: ['ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILJCkdpnl9FtcHWYOXLXIH7mvUTPqHziHsV3RiiD542e florian@yellowkeycard.net']
+      update_system: true
+
+  # Set up a swap file of the specified size if needed
+  - role: geerlingguy.swap
+    become: true
+
+  # Security shenanigans
+  - role: devsec.hardening.ssh_hardening
+    become: true
+
+  - role: devsec.hardening.os_hardening
+    become: true
+    vars:
+      sysctl_overwrite:
+        net.ipv4.ip_forward: 1
+        kernel.unprivileged_userns_clone: 1
+        vm.mmap_rnd_bits: 24
+      os_auth_pw_max_age: 99999
+      os_auth_pw_remember: 0
+
+  # Set up Borg Backup server
+  - role: apollo13.borgbackup
+    become: true
+    vars:
+      borgbackup_user: omv
+      borgbackup_repository_storage: /export/private/backup/borg
+
+  - role: setup_openmediavault

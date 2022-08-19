@@ -1,0 +1,9 @@
+---
+- name: Write content to {{ file.path }}
+  become: true
+  ansible.builtin.copy:
+    dest: "{{ file.path }}"
+    content: |
+      {{ file.content }}
+    owner: "{{ file.owner | default(ansible_user) }}"
+    mode: "{{ file.permissions | default('0644') }}"
