@@ -16,6 +16,15 @@ extra_packages:
   - openmediavault-snapraid
   - openmediavault-mergerfs
   - openmediavault-keyring
+enable_services:
+  - anacron.service
+  - logrotate.service
+  - nfs-server.service
+  - nmbd.service
+  - postfix.service
+  - smartmontools.service
+  - smbd.service
+  - udisks2.service
 mounts:
   - source: /dev/disk/by-uuid/5f9c334a-6a03-4955-82ab-56e6f96beb71
     mountpoint: /srv/dev-disk-by-uuid-5f9c334a-6a03-4955-82ab-56e6f96beb71

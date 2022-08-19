@@ -11,5 +11,8 @@
   loop_control:
     loop_var: file
 
+- name: Restart and enable services
+  ansible.builtin.include_tasks: enable_services.yml
+
 - name: Reboot to take on new configuration
   ansible.builtin.reboot:

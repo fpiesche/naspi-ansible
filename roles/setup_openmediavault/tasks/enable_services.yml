@@ -1,0 +1,9 @@
+---
+- name: Start and enable service services
+  ansible.builtin.service:
+    name: "{{ service }}"
+    state: restarted
+    enabled: true
+  loop: "{{ enable_services }}"
+  loop_control:
+    loop_var: service
